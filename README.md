@@ -1,6 +1,6 @@
 # weather_app
 
-A new Flutter project.
+Um aplicativo que mostra a temperatura e a condição climática do local. 
 
 ## Getting Started
 

@@ -1,6 +1,6 @@
 # weather_app
 
-Um aplicativo que mostra a temperatura e a condição climática do local. 
+Um aplicativo que utiliza o pacote Dio para realizar as requisições HTTP e retorna a  temperatura e a condição climática do local. O intuito do projeto foi aplicar o  conhecimento de integração de API.
 
 ## Getting Started
 

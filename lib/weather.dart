@@ -24,23 +24,7 @@ class _WeatherState extends State<Weather> {
     });
   }
 
-  late Response response;
-  Dio dio = Dio();
-  Future fetchSearch() async {
-    try {
-      response = await dio.get(url + input);
-      print(response);
-
-      setState(() {
-        final Map<dynamic, dynamic> result = response.data;
-        location = result["results"]["city"];
-        temperature = result["results"]["temp"];
-        description = result["results"]["description"];
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {

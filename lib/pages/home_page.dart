@@ -1,30 +1,36 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_app/model/weather_model.dart';
+import 'package:weather_app/repository/weather_repository.dart';
+import 'package:weather_app/service/dio_service.dart';
 
-class Weather extends StatefulWidget {
-  const Weather({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<Weather> createState() => _WeatherState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _WeatherState extends State<Weather> {
-  int temperature = 22;
-  String location = 'São Paulo';
-  String description = "";
+class _HomePageState extends State<HomePage> {
   String input = "";
   final controller = TextEditingController();
-  late String url = "https://api.hgbrasil.com/weather?key=f401c875&city_name=";
-  //chave f401c875
+  final WeatherRepository repository = WeatherRepository(DioService(Dio()));
+  WeatherModel? weatherModel;
 
-  void _setText() {
+  Future<void> _setText() async {
     setState(() {
       input = controller.text;
-      fetchSearch();
     });
-  }
 
-  
+    try {
+      final fetch = await repository.fetchWeather(input);
+      setState(() {
+        weatherModel = fetch;
+      });
+    } catch (e) {
+      print('Failed to fetch weather: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,21 +53,26 @@ class _WeatherState extends State<Weather> {
                   children: <Widget>[
                     Center(
                       child: Text(
-                        '$temperature°C',
+                        weatherModel != null
+                            ? weatherModel!.location
+                            : 'Informe uma localização',
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 40.0),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        weatherModel != null
+                            ? '${weatherModel!.temperature}ºC'
+                            : '',
                         style: const TextStyle(
                             color: Colors.white, fontSize: 60.0),
                       ),
                     ),
                     Center(
                       child: Text(
-                        location,
-                        style: const TextStyle(
-                            color: Colors.white, fontSize: 40.0),
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        description,
+                        weatherModel != null ? weatherModel!.description : '',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.white, fontSize: 40.0),
